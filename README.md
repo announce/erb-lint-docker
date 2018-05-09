@@ -2,7 +2,8 @@
 
 [![Build Status](https://travis-ci.org/announce/erb-lint-docker.svg?branch=master)](https://travis-ci.org/announce/erb-lint-docker)
 
-A docker image for https://github.com/Shopify/erb-lint
+A docker image for [Shopify/erb-lint](https://github.com/Shopify/erb-lint).
+The latest docker image is available at [announced/erb-lint](https://hub.docker.com/r/announced/erb-lint/).
 
 ### Usage
 
