@@ -5,6 +5,6 @@ services:
 
 script:
 - docker version
-- bash ./am lint
-- bash ./am build
-- bash ./am run
+- bash ./el lint
+- bash ./el build
+- bash ./el run
