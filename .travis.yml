@@ -1,0 +1,10 @@
+sudo: required
+
+services:
+  - docker
+
+script:
+- docker version
+- bash ./am lint
+- bash ./am build
+- bash ./am run
