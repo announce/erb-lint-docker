@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
 
-function el() {
+function el () {
   set -u
   readonly TAG="announced/erb-lint"
 
-  init() {
+  init () {
     init-dependencies
   }
 
@@ -43,7 +43,7 @@ function el() {
   }
 
   run () {
-    docker run --rm -ti -v "$(pwd):/workdir" "${TAG}" --version
+    docker run --rm -i "${TAG}" --version
   }
 
   release () {

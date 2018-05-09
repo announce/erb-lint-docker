@@ -8,5 +8,5 @@ The latest docker image is available at [announced/erb-lint](https://hub.docker.
 ### Usage
 
  ```bash
- docker run --rm -ti -v "$(pwd):/workdir" announced/erb-lint --config .erb-lint.yml __PATH_TO__/*.html.erb
+ docker run --rm -i announced/erb-lint --config .erb-lint.yml __PATH_TO__/*.html.erb
  ```
