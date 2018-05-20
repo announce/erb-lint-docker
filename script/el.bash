@@ -2,7 +2,7 @@
 
 function el () {
   set -u
-  readonly TAG="announced/erb-lint"
+  readonly TAG="announced/erb-lint:v0.0.24"
 
   init () {
     init-dependencies
@@ -70,6 +70,7 @@ function el () {
     $1
   else
     usage
+    error "Command not found."
   fi
 }
 
