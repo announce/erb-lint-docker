@@ -43,7 +43,7 @@ function el () {
   }
 
   run () {
-    docker run --rm -i "${TAG}" --version
+    docker run --rm -iv "$(pwd):/workdir" "${TAG}" --version
   }
 
   release () {
