@@ -3,9 +3,7 @@
 function el () {
   set -u
   readonly VERSION_ERB_LINT="0.0.26"
-  readonly TAG_AFFIX="announced/erb-lint"
-  readonly TAG_VERSION="${TAG_AFFIX}:v${VERSION_ERB_LINT}"
-  readonly TAG_LATEST="${TAG_AFFIX}:latest"
+  readonly TAG="announced/erb-lint-docker:v${VERSION_ERB_LINT}"
 
   init () {
     init-dependencies
@@ -14,6 +12,7 @@ function el () {
   init-dependencies () {
     local DEPENDENCIES=(
       "docker"
+      "git"
     )
     for TARGET in "${DEPENDENCIES[@]}"; do
       if [[ ! -x "$(command -v "${TARGET}")" ]]; then
@@ -45,21 +44,25 @@ function el () {
 
   build () {
     docker build \
-      -t "${TAG_VERSION}" \
-      -t "${TAG_LATEST}" \
+      -t "${TAG}" \
       --build-arg VERSION_ERB_LINT="${VERSION_ERB_LINT}" \
       .
   }
 
   run () {
-    docker run --rm -iv "$(pwd):/workdir" "${TAG_VERSION}" --version
+    docker run --rm -iv "$(pwd):/workdir" "${TAG}" --version
   }
 
   release () {
-    lint \
-    && build \
-    && docker push "${TAG_VERSION}" \
-    && docker push "${TAG_LATEST}"
+    set -e
+    local LINK="https://hub.docker.com/r/announced/erb-lint-docker/"
+    local MESSAGE="The latest docker image is available at ${LINK}."
+    lint && build
+    if [[ $(git ls-remote origin "refs/tags/v${VERSION_ERB_LINT}" | wc -l) -gt 0 ]]; then
+      git push --delete origin "v${VERSION_ERB_LINT}"
+    fi
+    git tag --force "v${VERSION_ERB_LINT}" --message="${MESSAGE}"
+    git push origin "v${VERSION_ERB_LINT}"
   }
 
   clean () {
