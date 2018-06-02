@@ -57,6 +57,9 @@ function el () {
     set -e
     local LINK="https://hub.docker.com/r/announced/erb-lint-docker/"
     local MESSAGE="The latest docker image is available at ${LINK}."
+    if [[ $(git diff-index HEAD -- | wc -l) -gt 0 ]]; then
+      error "$(git diff-index --shortstat HEAD --)"
+    fi
     lint && build
     if [[ $(git ls-remote origin "refs/tags/v${VERSION_ERB_LINT}" | wc -l) -gt 0 ]]; then
       git push --delete origin "v${VERSION_ERB_LINT}"
