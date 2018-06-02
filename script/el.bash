@@ -21,17 +21,6 @@ function el () {
     done
   }
 
-  error () {
-    MESSAGE="${1:-Something went wrong.}"
-    echo "[$(basename "$0")] ERROR: ${MESSAGE}" >&2
-    exit 1
-  }
-
-  info () {
-    MESSAGE="${1:-}"
-    echo "[$(basename "$0")] INFO: ${MESSAGE}"
-  }
-
   lint () {
     lint-dockerfile \
     && lint-shell
@@ -59,6 +48,7 @@ function el () {
   }
 
   release-versions () {
+    # One-off command
     local CANDIDATES=(
       0.0.25
       0.0.24
@@ -109,6 +99,17 @@ function el () {
 
   clean () {
     docker system prune
+  }
+
+  error () {
+    MESSAGE="${1:-Something went wrong.}"
+    echo "[$(basename "$0")] ERROR: ${MESSAGE}" >&2
+    exit 1
+  }
+
+  info () {
+    MESSAGE="${1:-}"
+    echo "[$(basename "$0")] INFO: ${MESSAGE}"
   }
 
   usage () {
