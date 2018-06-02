@@ -38,7 +38,9 @@ function el () {
   }
 
   lint-shell () {
-    docker run --rm -v "$PWD:/mnt" koalaman/shellcheck:v0.5.0 script/*.bash
+    docker run --rm -v "$PWD:/mnt" koalaman/shellcheck:v0.5.0 \
+      --exclude=SC1090 \
+      script/*.bash
   }
 
   build () {
