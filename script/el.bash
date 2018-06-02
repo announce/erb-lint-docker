@@ -34,11 +34,11 @@ function el () {
   }
 
   lint-dockerfile () {
-    docker run --rm -i hadolint/hadolint < Dockerfile
+    docker run --rm -i hadolint/hadolint:v1.6.6 < Dockerfile
   }
 
   lint-shell () {
-    docker run --rm -v "$PWD:/mnt" koalaman/shellcheck:stable script/*.bash
+    docker run --rm -v "$PWD:/mnt" koalaman/shellcheck:v0.5.0 script/*.bash
   }
 
   build () {
@@ -67,8 +67,8 @@ function el () {
   usage () {
     SELF="$(basename "$0")"
     echo -e "${SELF} -- elb-lint-docker
-    \nUsage: ${SELF} [arguments]
-    \nArguments:"
+    \\nUsage: ${SELF} [arguments]
+    \\nArguments:"
     declare -F | awk '{print "\t" $3}' | grep -v "${SELF}"
   }
 
