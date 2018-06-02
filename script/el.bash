@@ -2,7 +2,10 @@
 
 function el () {
   set -u
-  readonly TAG="announced/erb-lint:v0.0.24"
+  readonly VERSION_ERB_LINT="0.0.26"
+  readonly TAG_AFFIX="announced/erb-lint"
+  readonly TAG_VERSION="${TAG_AFFIX}:v${VERSION_ERB_LINT}"
+  readonly TAG_LATEST="${TAG_AFFIX}:latest"
 
   init () {
     init-dependencies
@@ -39,17 +42,22 @@ function el () {
   }
 
   build () {
-    docker build -t "${TAG}" .
+    docker build \
+      -t "${TAG_VERSION}" \
+      -t "${TAG_LATEST}" \
+      --build-arg VERSION_ERB_LINT="${VERSION_ERB_LINT}" \
+      .
   }
 
   run () {
-    docker run --rm -iv "$(pwd):/workdir" "${TAG}" --version
+    docker run --rm -iv "$(pwd):/workdir" "${TAG_VERSION}" --version
   }
 
   release () {
     lint \
     && build \
-    && docker push "${TAG}"
+    && docker push "${TAG_VERSION}" \
+    && docker push "${TAG_LATEST}"
   }
 
   clean () {
