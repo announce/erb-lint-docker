@@ -1,6 +1,5 @@
 FROM ruby:2.4-alpine3.7
 
-ARG VERSION_ERB_LINT
 RUN apk add --no-cache \
     alpine-sdk=0.5-r0 \
     libxml2-dev=2.9.7-r0 \
@@ -10,7 +9,9 @@ RUN apk add --no-cache \
     -- --use-system-libraries \
     --with-xml2-config=/usr/bin/xml2-config \
     --with-xslt-config=/usr/bin/xslt-config \
-  && gem install erb_lint -v "${VERSION_ERB_LINT}"
+  && nokogiri --version
 
+ARG VERSION_ERB_LINT
+RUN gem install erb_lint -v "${VERSION_ERB_LINT}"
 WORKDIR /workdir
 ENTRYPOINT ["erblint"]

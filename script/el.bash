@@ -22,9 +22,14 @@ function el () {
   }
 
   error () {
-    MESSAGE="${1:-'Something went wrong.'}"
+    MESSAGE="${1:-Something went wrong.}"
     echo "[$(basename "$0")] ERROR: ${MESSAGE}" >&2
     exit 1
+  }
+
+  info () {
+    MESSAGE="${1:-}"
+    echo "[$(basename "$0")] INFO: ${MESSAGE}"
   }
 
   lint () {
@@ -80,8 +85,8 @@ function el () {
     lint
     for VERSION_ERB_LINT in "${CANDIDATES[@]}"; do
       TAG="announced/erb-lint-docker:v${VERSION_ERB_LINT}"
-      echo "Releasing ${TAG}"
-      build \
+      info "Releasing ${TAG}" \
+      && build \
       && docker push "${TAG}"
     done
   }
@@ -93,7 +98,7 @@ function el () {
     if [[ $(git diff-index HEAD -- | wc -l) -gt 0 ]]; then
       error "$(git diff-index --shortstat HEAD --)"
     fi
-    echo "Releasing ${TAG}"
+    info "Releasing ${TAG}"
     lint && build
     if [[ $(git ls-remote origin "refs/tags/v${VERSION_ERB_LINT}" | wc -l) -gt 0 ]]; then
       git push --delete origin "v${VERSION_ERB_LINT}"
