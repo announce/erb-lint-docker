@@ -2,8 +2,8 @@
 
 function el () {
   set -u
-  readonly VERSION_ERB_LINT="0.0.26"
-  readonly TAG="announced/erb-lint-docker:v${VERSION_ERB_LINT}"
+  local VERSION_ERB_LINT="0.0.26"
+  local TAG="announced/erb-lint-docker:v${VERSION_ERB_LINT}"
 
   init () {
     init-dependencies
@@ -16,8 +16,8 @@ function el () {
     )
     for TARGET in "${DEPENDENCIES[@]}"; do
       if [[ ! -x "$(command -v "${TARGET}")" ]]; then
-      error "Install ${TARGET}."
-    fi
+        error "Install ${TARGET}."
+      fi
     done
   }
 
@@ -53,6 +53,39 @@ function el () {
     docker run --rm -iv "$(pwd):/workdir" "${TAG}" --version
   }
 
+  release-versions () {
+    local CANDIDATES=(
+      0.0.25
+      0.0.24
+      0.0.23
+      0.0.22
+      0.0.21
+      0.0.20
+      0.0.19
+      0.0.18
+      0.0.17
+      0.0.16
+      0.0.15
+      0.0.14
+      0.0.13
+      0.0.12
+      0.0.11
+      0.0.9
+      0.0.8
+      0.0.7
+      0.0.6
+      0.0.5
+      0.0.4
+    )
+    lint
+    for VERSION_ERB_LINT in "${CANDIDATES[@]}"; do
+      TAG="announced/erb-lint-docker:v${VERSION_ERB_LINT}"
+      echo "Releasing ${TAG}"
+      build \
+      && docker push "${TAG}"
+    done
+  }
+
   release () {
     set -e
     local LINK="https://hub.docker.com/r/announced/erb-lint-docker/"
@@ -60,6 +93,7 @@ function el () {
     if [[ $(git diff-index HEAD -- | wc -l) -gt 0 ]]; then
       error "$(git diff-index --shortstat HEAD --)"
     fi
+    echo "Releasing ${TAG}"
     lint && build
     if [[ $(git ls-remote origin "refs/tags/v${VERSION_ERB_LINT}" | wc -l) -gt 0 ]]; then
       git push --delete origin "v${VERSION_ERB_LINT}"
